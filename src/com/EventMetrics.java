@@ -8,7 +8,6 @@ class EventMetrics {
 
     private final AmazingClock clock;
     private Map<String, EventStatistics> stats;
-    private List<String> events = new ArrayList<>();
 
     EventMetrics(AmazingClock clock) {
         this.clock = clock;
@@ -18,7 +17,6 @@ class EventMetrics {
     void incrementEvent(String eventName) {
         Long t = clock.getCurrentMinutes();
         EventStatistics e = stats.getOrDefault(eventName, new EventStatistics(eventName));
-        events.add(eventName);
         e.add(t);
         stats.put(eventName, e);
     }
@@ -38,6 +36,14 @@ class EventMetrics {
             list.add(entry.getValue());
         }
         return list;
+    }
+
+    void printAllStatistics() {
+        List<EventStatistics> list = allStatistics();
+        for (EventMetrics.EventStatistics statistic : list) {
+            System.out.println(statistic.name);
+            System.out.println(statistic.toString());
+        }
     }
 
     class EventStatistics {
